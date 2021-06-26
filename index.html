@@ -1,12 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/105/three.min.js"></script>
+    <script>
+        window.addEventListener("load", init);
+        function init(){
+            const size = {
+                width: 960,
+                height: 540,
+            };
+            const threeCanvas = document.getElementById("three-canvas");
+            const renderer = new THREE.WebGLRenderer({canvas: threeCanvas});
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(size.width, size.height);
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(
+                45,
+                size.width / size.height
+            );
+            camera.position.set(0,1000,1000);
+            camera.lookAt(new THREE.Vector3(0,0,0));
+
+            const geometry = new THREE.BoxGeometry(400, 400, 400);
+            const material = new THREE.MeshNormalMaterial();
+            const box = new THREE.Mesh(geometry, material);
+            scene.add(box);
+
+            const grid = new THREE.GridHelper(2000);
+            scene.add(grid);
+            const axis = new THREE.AxesHelper(500);
+            scene.add(axis);
+
+            tick();
+
+            function tick(){
+                box.rotation.y += 0.01;
+                renderer.render(scene, camera);
+                requestAnimationFrame(tick);
+            }
+        }
+    </script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
-    <p>hello world</p>
+    <canvas id="three-canvas"></canvas>
 </body>
 </html>
